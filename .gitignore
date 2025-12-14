@@ -205,3 +205,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# MLOps & Project Specific Additions
+.env
+.vscode/
+data/
+mlruns/
+dbt/target/

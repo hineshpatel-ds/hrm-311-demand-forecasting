@@ -1,0 +1,65 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16
+    container_name: hrm311_postgres
+    environment:
+      POSTGRES_USER: ds
+      POSTGRES_PASSWORD: ds_password
+      POSTGRES_DB: hrm311
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ds -d hrm311"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: hrm311_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@local.dev
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.14.2
+    container_name: hrm311_mlflow
+    ports:
+      - "5000:5000"
+    environment:
+      MLFLOW_TRACKING_URI: http://0.0.0.0:5000
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    volumes:
+      - mlflow_data:/mlflow
+
+
+  dev:
+    image: mcr.microsoft.com/devcontainers/python:3.11-bookworm
+    container_name: hrm311_dev
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for the DB before starting dev
+      mlflow:
+        condition: service_started
+    volumes:
+      - .:/workspaces/hrm-311-demand-forecasting # Mount your project folder
+    command: /bin/sh -c "while sleep 1000; do :; done" # Keep the container running
+
+
+
+volumes:
+  postgres_data:
+  mlflow_data:
