@@ -213,3 +213,6 @@ __marimo__/
 data/
 mlruns/
 dbt/target/
+
+# dbt credentials
+dbt/profiles.yml
