@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: stg_311_call_volumes
+    description: "Cleaned and typed staging table for HRM 311 call volumes."
+    columns:
+      - name: object_id
+        tests: [not_null, unique]
+      - name: call_ts
+        tests: [not_null]
+      - name: offered
+        tests:
+          - not_null
+      - name: handled
+        tests:
+          - not_null
+      - name: abandoned
+        tests:
+          - not_null
