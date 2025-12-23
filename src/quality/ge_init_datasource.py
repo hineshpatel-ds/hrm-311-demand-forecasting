@@ -6,16 +6,23 @@ def main():
     load_dotenv()
     db_url = os.getenv("DATABASE_URL")
     
-    # Initialize the context - pointing to where your YAML lives
+    # Initialize the context from the current directory
     context = gx.get_context(project_root_dir="./")
+
     datasource_name = "postgres_hrm311"
     
-    # Logic to add if missing
+    # Check for both possible names to be safe
+    ds_handler = getattr(context, "data_sources", getattr(context, "datasources", None))
+    
+    if ds_handler is None:
+        raise RuntimeError("Could not find datasource attribute on GX context.")
+
     try:
-        context.datasources.get(datasource_name)
+        ds_handler.get(datasource_name)
         print(f"✅ Datasource '{datasource_name}' already exists.")
-    except KeyError:
-        context.datasources.add_postgres(
+    except (KeyError, ValueError):
+        # Adding the datasource
+        ds_handler.add_postgres(
             name=datasource_name, 
             connection_string=db_url
         )
