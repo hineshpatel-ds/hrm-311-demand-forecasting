@@ -9,6 +9,7 @@ pydantic>=2.0.0,<2.10.0
 prefect==2.20.15
 great-expectations==0.18.21
 mlflow==2.14.2
+setuptools<81  # mlflow 2.14.2 imports pkg_resources, which newer setuptools no longer ships
 
 scikit-learn==1.5.2
 xgboost==2.1.2
