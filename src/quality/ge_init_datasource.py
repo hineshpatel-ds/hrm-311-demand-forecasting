@@ -1,6 +1,8 @@
 import os
+
 import great_expectations as gx
 from dotenv import load_dotenv
+
 
 def main():
     load_dotenv()

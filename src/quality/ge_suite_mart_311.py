@@ -1,4 +1,5 @@
 import os
+
 import great_expectations as gx
 from dotenv import load_dotenv
 
@@ -9,13 +10,12 @@ def main():
     db_url = os.getenv("DATABASE_URL")
     context = gx.get_context(project_root_dir="./")
 
-    # 1. Use the direct context method your terminal suggested
+    # 1. Create the suite, or confirm it already exists
     try:
-        suite = context.add_expectation_suite(expectation_suite_name=SUITE_NAME)
+        context.add_expectation_suite(expectation_suite_name=SUITE_NAME)
     except Exception:
-        # If it exists, just get it
-        suite = context.get_expectation_suite(expectation_suite_name=SUITE_NAME)
-    
+        context.get_expectation_suite(expectation_suite_name=SUITE_NAME)
+
     print(f"✅ Suite ready: {SUITE_NAME}")
 
     # 2. Get Datasource (Legacy/Early-V1 naming)

@@ -1,5 +1,7 @@
 from prefect import flow, task
+
 from src.ingestion.hrm_311_call_volumes import download_csv, load_to_postgres
+
 
 @task(retries=2, retry_delay_seconds=30)
 def t_download():

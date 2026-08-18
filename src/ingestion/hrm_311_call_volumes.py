@@ -1,4 +1,3 @@
-import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -6,7 +5,7 @@ import pandas as pd
 import requests
 from sqlalchemy import text
 
-from src.utils.db import get_engine, ensure_schemas
+from src.utils.db import ensure_schemas, get_engine
 
 DATASET_ID = "8bfd88fc3de041c894cb69e5c62304fb"  # HRM 311 Call Volumes (ArcGIS Hub)
 
