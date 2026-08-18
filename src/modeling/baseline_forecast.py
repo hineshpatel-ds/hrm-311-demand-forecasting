@@ -1,36 +1,17 @@
 import os
 from dataclasses import dataclass
-from dotenv import load_dotenv  
-
-import pandas as pd
-from sqlalchemy import create_engine
-from sklearn.metrics import mean_absolute_error
 
 import mlflow
+import pandas as pd
+from dotenv import load_dotenv
+from sklearn.metrics import mean_absolute_error
+
+from src.utils.db import load_mart_series
+
 
 @dataclass
 class Metrics:
     mae: float
-
-def load_series():
-    db_url = os.getenv("DATABASE_URL")
-    if not db_url:
-        raise RuntimeError("DATABASE_URL not set.")
-
-    engine = create_engine(db_url)
-    df = pd.read_sql(
-        """
-        SELECT bucket_ts, offered
-        FROM mart.mart_311_call_volume_30m
-        ORDER BY bucket_ts
-        """,
-        engine,
-        parse_dates=["bucket_ts"],
-    )
-    df = df.dropna()
-    df["bucket_ts"] = pd.to_datetime(df["bucket_ts"], utc=True)
-    df = df.set_index("bucket_ts")
-    return df
 
 def seasonal_naive_forecast(df: pd.DataFrame, horizon_steps: int = 48, season_steps: int = 7 * 48):
     """
@@ -59,7 +40,7 @@ def evaluate(test, pred) -> Metrics:
 def main():
     load_dotenv()
     # 1) Load
-    df = load_series()
+    df = load_mart_series()
 
     # 2) Forecast next day (48 half-hours)
     horizon_steps = 48
