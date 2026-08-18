@@ -1,7 +1,9 @@
 {{ config(materialized='table') }}
 
-SELECT 
-    DATE_TRUNC('hour', call_ts) as bucket_ts, 
+-- date_bin (not date_trunc, which only rounds to whole hours) is what actually
+-- produces 30-minute buckets to match this mart's grain.
+SELECT
+    date_bin('30 minutes', call_ts, TIMESTAMPTZ '2001-01-01') as bucket_ts,
     SUM(offered) as offered,
     SUM(handled) as handled,
     SUM(abandoned) as abandoned,
