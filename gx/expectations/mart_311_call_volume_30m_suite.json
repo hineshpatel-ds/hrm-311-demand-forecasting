@@ -27,7 +27,8 @@
       "expectation_type": "expect_column_values_to_be_between",
       "kwargs": {
         "column": "offered",
-        "min_value": 0
+        "min_value": 0,
+        "max_value": 5000
       },
       "meta": {}
     },
@@ -42,7 +43,8 @@
       "expectation_type": "expect_column_values_to_be_between",
       "kwargs": {
         "column": "handled",
-        "min_value": 0
+        "min_value": 0,
+        "max_value": 1000
       },
       "meta": {}
     },
@@ -57,7 +59,8 @@
       "expectation_type": "expect_column_values_to_be_between",
       "kwargs": {
         "column": "abandoned",
-        "min_value": 0
+        "min_value": 0,
+        "max_value": 1000
       },
       "meta": {}
     },
@@ -72,7 +75,8 @@
       "expectation_type": "expect_column_values_to_be_between",
       "kwargs": {
         "column": "processed_in_ivr",
-        "min_value": 0
+        "min_value": 0,
+        "max_value": 5000
       },
       "meta": {}
     },
@@ -87,7 +91,8 @@
       "expectation_type": "expect_column_values_to_be_between",
       "kwargs": {
         "column": "total_talk_time_sec",
-        "min_value": 0
+        "min_value": 0,
+        "max_value": 200000
       },
       "meta": {}
     },
@@ -102,7 +107,8 @@
       "expectation_type": "expect_column_values_to_be_between",
       "kwargs": {
         "column": "avg_talk_time_sec",
-        "min_value": 0
+        "min_value": 0,
+        "max_value": 20000
       },
       "meta": {}
     }

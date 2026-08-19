@@ -47,10 +47,21 @@ def main():
     validator.expect_column_values_to_not_be_null("bucket_ts")
     validator.expect_column_values_to_be_unique("bucket_ts")
 
-    cols = ["offered", "handled", "abandoned", "processed_in_ivr", "total_talk_time_sec", "avg_talk_time_sec"]
-    for col in cols:
+    # Upper bounds give headroom over the real observed max (~1,200 for
+    # offered) but still catch the class of corrupt source row we found:
+    # two 2023/2024 New Year's Day records with OFFERED in the hundreds
+    # of thousands.
+    max_values = {
+        "offered": 5000,
+        "handled": 1000,
+        "abandoned": 1000,
+        "processed_in_ivr": 5000,
+        "total_talk_time_sec": 200000,
+        "avg_talk_time_sec": 20000,
+    }
+    for col, max_value in max_values.items():
         validator.expect_column_values_to_not_be_null(col)
-        validator.expect_column_values_to_be_between(col, min_value=0)
+        validator.expect_column_values_to_be_between(col, min_value=0, max_value=max_value)
 
     # 6. Save directly via Validator (Most stable method)
     validator.save_expectation_suite(discard_failed_expectations=False)

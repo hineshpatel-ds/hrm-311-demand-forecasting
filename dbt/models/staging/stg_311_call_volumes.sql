@@ -44,3 +44,7 @@ select
 
     ingested_at_utc
 from typed
+-- Two rows (New Year's Day 2023 and 2024, 4:00-4:30 AM) carry OFFERED values
+-- in the hundreds of thousands versus a legitimate max of ~1,200 elsewhere in
+-- the series -- corrupt records from the source export, not real spikes.
+where offered < 5000
